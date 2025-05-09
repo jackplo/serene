@@ -43,7 +43,7 @@ test: $(TEST_BIN)
 	@echo "Running application searcher test..."
 	@$(TEST_BIN)
 
-$(TEST_BIN): $(TEST_OBJ) $(BACKEND_OBJ) $(MODEL_OBJ)
+$(TEST_BIN): $(TEST_OBJ) $(BACKEND_OBJ)
 	@echo "Linking test program..."
 	@mkdir -p $(BUILD_DIR)
 	@$(CXX) $(CXXFLAGS) -o $@ $^

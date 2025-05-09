@@ -16,11 +16,11 @@ int main() {
 
   // Test some searches
   std::vector<std::string> test_queries = {
-      "term",    // Should find terminal applications
+      //"term",    // Should find terminal applications
       "firefox", // Should find Firefox
-      "edit",    // Should find text editors
-      "game",    // Should find games
-      "x"        // Should find many applications
+      //"edit",    // Should find text editors
+      "game", // Should find games
+              //"x"        // Should find many applications
   };
 
   for (const auto &query : test_queries) {

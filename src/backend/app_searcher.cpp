@@ -27,17 +27,19 @@ Application AppSearcher::parse_desktop_file(const std::string &file_path) {
   std::string line;
   bool in_desktop_entry = false;
   std::regex name_regex("^Name=(.*)$");
-  std::regex exec_regex("^Exec=(.*)$");
+  std::regex exec_regex(R"(^Exec\s*=\s*(.*)$)");
   std::regex icon_regex("^Icon=(.*)$");
   std::regex comment_regex("^Comment=(.*)$");
   std::regex terminal_regex("^Terminal=(.*)$");
 
   while (std::getline(file, line)) {
-    // Skip comments and empty lines
     if (line.empty() || line[0] == '#')
       continue;
 
-    // Check if we're in the [Desktop Entry] section
+    if (line[0] == '[' && line != "[Desktop Entry]") {
+      break;
+    }
+
     if (line == "[Desktop Entry]") {
       in_desktop_entry = true;
       continue;
@@ -48,33 +50,23 @@ Application AppSearcher::parse_desktop_file(const std::string &file_path) {
 
     std::smatch matches;
 
-    // Parse Name
     if (std::regex_match(line, matches, name_regex) && matches.size() > 1) {
       app.name = matches[1].str();
-    }
-    // Parse Exec
-    else if (std::regex_match(line, matches, exec_regex) &&
-             matches.size() > 1) {
+    } else if (std::regex_match(line, matches, exec_regex) &&
+               matches.size() > 1) {
       app.exec = matches[1].str();
-    }
-    // Parse Icon
-    else if (std::regex_match(line, matches, icon_regex) &&
-             matches.size() > 1) {
+    } else if (std::regex_match(line, matches, icon_regex) &&
+               matches.size() > 1) {
       app.icon = matches[1].str();
-    }
-    // Parse Comment
-    else if (std::regex_match(line, matches, comment_regex) &&
-             matches.size() > 1) {
+    } else if (std::regex_match(line, matches, comment_regex) &&
+               matches.size() > 1) {
       app.comment = matches[1].str();
-    }
-    // Parse Terminal
-    else if (std::regex_match(line, matches, terminal_regex) &&
-             matches.size() > 1) {
+    } else if (std::regex_match(line, matches, terminal_regex) &&
+               matches.size() > 1) {
       app.terminal = (matches[1].str() == "true");
     }
   }
 
-  // If no name was found, use the filename
   if (app.name.empty()) {
     app.name = fs::path(file_path).stem().string();
   }
@@ -83,10 +75,9 @@ Application AppSearcher::parse_desktop_file(const std::string &file_path) {
 }
 
 bool AppSearcher::load_applications() {
-  // Common application directories in Linux
-  std::vector<std::string> app_dirs = {
-      "/usr/share/applications", "/usr/local/share/applications",
-      std::string(getenv("HOME")) + "/.local/share/applications"};
+  std::vector<std::string> app_dirs = {"/usr/share/applications",
+                                       std::string(getenv("HOME")) +
+                                           "/.local/share/applications"};
 
   for (const auto &dir : app_dirs) {
     if (!fs::exists(dir))
@@ -95,7 +86,7 @@ bool AppSearcher::load_applications() {
     for (const auto &entry : fs::directory_iterator(dir)) {
       if (entry.path().extension() == ".desktop") {
         Application app = parse_desktop_file(entry.path().string());
-        // Only add applications that have an exec command
+
         if (!app.exec.empty()) {
           m_applications.push_back(app);
         }
@@ -103,7 +94,6 @@ bool AppSearcher::load_applications() {
     }
   }
 
-  // Sort applications by name
   std::sort(m_applications.begin(), m_applications.end(),
             [](const Application &a, const Application &b) {
               return a.name < b.name;
@@ -123,8 +113,24 @@ std::vector<Application> AppSearcher::search(const std::string &query) {
     std::transform(lowercase_name.begin(), lowercase_name.end(),
                    lowercase_name.begin(), ::tolower);
 
-    if (lowercase_name.find(lowercase_query) != std::string::npos) {
-      results.push_back(app);
+    std::string lowercase_exec = app.exec;
+    std::transform(lowercase_exec.begin(), lowercase_exec.end(),
+                   lowercase_exec.begin(), ::tolower);
+
+    if (lowercase_name.find(lowercase_query) != std::string::npos ||
+        lowercase_exec.find(lowercase_query) != std::string::npos) {
+
+      bool already_added = false;
+      for (const auto &result : results) {
+        if (result.name == app.name && result.exec == app.exec) {
+          already_added = true;
+          break;
+        }
+      }
+
+      if (!already_added) {
+        results.push_back(app);
+      }
     }
   }
 

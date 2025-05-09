@@ -6,6 +6,10 @@
 #include <gtkmm/listview.h>
 #include <gtkmm/signallistitemfactory.h>
 #include <gtkmm/singleselection.h>
+#include <sstream>
+#include <string>
+#include <unistd.h>
+#include <vector>
 
 class ListView : public Gtk::ListView {
 public:
@@ -15,6 +19,11 @@ public:
 
 private:
   void setup_factory();
+  bool on_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state);
+  void on_click_pressed(int n_press, double x, double y);
+  void on_row_activated(guint position);
+
+  void launch_application(const std::string &exec_command);
 
   Glib::RefPtr<ApplicationListModel> m_model;
   Glib::RefPtr<Gtk::SingleSelection> m_selection;
