@@ -40,7 +40,7 @@ make
 To run the application:
 
 ```bash
-./spotlight
+./serene
 ```
 
 To run tests:

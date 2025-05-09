@@ -38,7 +38,7 @@ make
 Run the app with:
 
 ```bash
-./spotlight
+./serene
 ```
 
 Run tests with:
