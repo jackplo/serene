@@ -7,9 +7,9 @@ Serene is a WIP and looking for active contributors.
 ## ✨ Features
 
 - Blazing-fast application search
+- Agent mode for personal AI assistance
 - Clean and modern UI with GTK4
-- Built with C++17 for performance and maintainability
-- Modular architecture for future extensibility
+- Built with C++ for performance
 
 ## 🖥️ Screenshots
 
