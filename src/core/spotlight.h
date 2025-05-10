@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../backend/app_searcher.h"
+#include "../components/customsearchentry.h"
 #include "../components/listview.h"
 #include "../components/scrollview.h"
-#include "../components/searchentry.h"
 #include <gtkmm/window.h>
 
 class Spotlight : public Gtk::Window {
@@ -16,7 +16,7 @@ protected:
   void load_css();
 
 private:
-  SearchEntry m_searchEntry;
+  CustomSearchEntry m_searchEntry;
   ListView m_listView;
   ScrollView m_scrollWindow;
   AppSearcher m_appSearcher;

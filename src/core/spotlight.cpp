@@ -18,7 +18,7 @@ Spotlight::Spotlight() {
   main_box.set_margin_bottom(12);
   main_box.add_css_class("spotlight-box");
 
-  m_searchEntry.signal_search_changed().connect(
+  m_searchEntry.signal_changed().connect(
       sigc::mem_fun(*this, &Spotlight::on_search_changed));
 
   m_scrollWindow.set_child(m_listView);
@@ -51,13 +51,22 @@ void Spotlight::on_search_changed() {
 void Spotlight::load_css() {
   auto css_provider = Gtk::CssProvider::create();
 
-  std::ifstream css_file("assets/style.css");
-  if (css_file.is_open()) {
-    std::string css_content((std::istreambuf_iterator<char>(css_file)),
-                            std::istreambuf_iterator<char>());
-    css_provider->load_from_data(css_content);
+  std::ifstream main_css_file("assets/style.css");
+  std::ifstream custom_css_file("assets/customsearchentry.css");
+
+  if (main_css_file.is_open() && custom_css_file.is_open()) {
+    std::string main_css_content(
+        (std::istreambuf_iterator<char>(main_css_file)),
+        std::istreambuf_iterator<char>());
+    std::string custom_css_content(
+        (std::istreambuf_iterator<char>(custom_css_file)),
+        std::istreambuf_iterator<char>());
+
+    // Combine both CSS contents
+    std::string combined_css = main_css_content + "\n" + custom_css_content;
+    css_provider->load_from_data(combined_css);
   } else {
-    std::cerr << "Error loading style.css" << std::endl;
+    std::cerr << "Error loading CSS files" << std::endl;
   }
 
   Gtk::StyleContext::add_provider_for_display(
