@@ -132,18 +132,18 @@ void ListView::setup_factory() {
 
 void ListView::update_model(const std::vector<Application> &applications) {
   m_model->set_applications(applications);
+  m_selection = Gtk::SingleSelection::create(m_model->get_model());
+  set_model(m_selection);
+  m_selection->set_selected(0);
 }
 
 void ListView::on_row_activated(guint position) {
-  std::cout << "Row activated at position: " << position << std::endl;
-
   auto model = m_selection->get_model();
   auto item = model->get_object(position);
 
   auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(item);
 
   if (app_obj) {
-    std::cout << "Launching via activation: " << app_obj->app.name << std::endl;
     launch_application(app_obj->app.exec);
   }
 }

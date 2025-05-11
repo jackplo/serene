@@ -21,8 +21,8 @@ entry.search image {
 }
 
 entry.search:focus {
-  border-color: #ff6b00;
-  box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+  border-color: #82DAB0;
+  box-shadow: 0 0 0 2px #82DAB0;
 }
 
 box.spotlight-box {
@@ -32,9 +32,10 @@ box.spotlight-box {
 
 /* ListView styling */
 listview {
-  background: rgb(30, 30, 30);
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #191919;
+  border-radius: 6px;
+  border: #222222 1px solid;
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 1);
 }
 
 listview row {
@@ -45,12 +46,13 @@ listview row {
 
 listview row:hover {
   background: rgba(255, 107, 0, 0.1);
-  color: #ff6b00;
+  color: #82DAB0;
 }
 
 listview row:selected {
-  background: rgba(255, 107, 0, 0.2);
-  color: #ff6b00;
+  box-shadow: 0px 0px 5px 0px #82DAB0;
+  background: #82DAB0;
+  color: #82DAB0;
 }
 
 /* ScrolledWindow styling */
@@ -75,14 +77,6 @@ scrolledwindow scrollbar slider {
   border-radius: 4px;
   min-width: 6px;
   min-height: 6px;
-}
-
-scrolledwindow scrollbar slider:hover {
-  background-color: rgba(255, 107, 0, 0.5);
-}
-
-scrolledwindow scrollbar slider:active {
-  background-color: #ff6b00;
 }
 
 /* Overshoot indicators */

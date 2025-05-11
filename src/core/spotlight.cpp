@@ -20,6 +20,16 @@ Spotlight::Spotlight() {
 
   m_searchEntry.signal_changed().connect(
       sigc::mem_fun(*this, &Spotlight::on_search_changed));
+  m_searchEntry.signal_activate().connect([this]() {
+    auto selected_pos = m_listView.get_selection()->get_selected();
+    if (selected_pos != GTK_INVALID_LIST_POSITION) {
+      auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(
+          m_listView.get_selection()->get_selected_item());
+      if (app_obj) {
+        m_listView.launch_application(app_obj->app.exec);
+      }
+    }
+  });
 
   m_scrollWindow.set_child(m_listView);
   m_scrollWindow.set_max_content_height(400);
@@ -30,12 +40,19 @@ Spotlight::Spotlight() {
   set_child(main_box);
 
   load_css();
+
+  signal_show().connect([this]() { m_searchEntry.grab_focus(); });
 }
 
 Spotlight::~Spotlight() {}
 
 void Spotlight::on_search_changed() {
   Glib::ustring query = m_searchEntry.get_text();
+
+  if (query.empty()) {
+    m_scrollWindow.hide();
+    return;
+  }
 
   auto results = m_appSearcher.search(query.raw());
 
@@ -45,6 +62,8 @@ void Spotlight::on_search_changed() {
     m_scrollWindow.hide();
   } else {
     m_scrollWindow.show();
+    // Select the first item in the list
+    m_listView.get_selection()->set_selected(0);
   }
 }
 

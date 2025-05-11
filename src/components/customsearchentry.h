@@ -14,6 +14,9 @@ public:
   void set_text(const Glib::ustring &text) { m_entry.set_text(text); }
 
   sigc::signal<void()> &signal_changed() { return m_signal_changed; }
+  sigc::signal<void()> &signal_activate() { return m_signal_activate; }
+
+  void grab_focus();
 
 private:
   void on_text_changed();
@@ -23,4 +26,5 @@ private:
   Gtk::Entry m_entry;
   Gtk::Button m_search_button;
   sigc::signal<void()> m_signal_changed;
+  sigc::signal<void()> m_signal_activate;
 };
