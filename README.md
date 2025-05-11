@@ -13,7 +13,9 @@ Serene is a WIP and looking for active contributors.
 
 ## 🖥️ Screenshots
 
-> _Coming soon..._
+![screenshot](screenshots/serene1.png)
+![screenshot](screenshots/serene2.png)
+![screenshot](screenshots/serene3.png)
 
 ## 🔧 Build Instructions
 
