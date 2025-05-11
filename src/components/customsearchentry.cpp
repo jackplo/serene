@@ -12,7 +12,6 @@ CustomSearchEntry::CustomSearchEntry()
   m_search_button.signal_clicked().connect(
       sigc::mem_fun(*this, &CustomSearchEntry::on_search_clicked));
 
-  // Connect to Entry's activate signal
   m_entry.signal_activate().connect([this]() { m_signal_activate.emit(); });
 }
 

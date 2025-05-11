@@ -23,10 +23,11 @@ Spotlight::Spotlight() {
   m_searchEntry.signal_activate().connect([this]() {
     auto selected_pos = m_listView.get_selection()->get_selected();
     if (selected_pos != GTK_INVALID_LIST_POSITION) {
-      auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(
-          m_listView.get_selection()->get_selected_item());
-      if (app_obj) {
+      auto item = m_listView.get_selection()->get_selected_item();
+      if (auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(item)) {
         m_listView.launch_application(app_obj->app.exec);
+      } else if (auto file_obj = std::dynamic_pointer_cast<FileObject>(item)) {
+        m_listView.open_file(file_obj->result.path);
       }
     }
   });
@@ -54,15 +55,25 @@ void Spotlight::on_search_changed() {
     return;
   }
 
-  auto results = m_appSearcher.search(query.raw());
+  auto app_results = m_appSearcher.search(query.raw());
+  if (app_results.size() > 5) {
+    app_results.resize(5);
+  }
 
-  m_listView.update_model(results);
+  std::vector<FileResult> file_results;
+  if (app_results.size() < 5) {
+    file_results = m_fileSearcher.search(query.raw());
+    if (file_results.size() > (5 - app_results.size())) {
+      file_results.resize(5 - app_results.size());
+    }
+  }
 
-  if (results.empty()) {
+  m_listView.update_model(app_results, file_results);
+
+  if (app_results.empty() && file_results.empty()) {
     m_scrollWindow.hide();
   } else {
     m_scrollWindow.show();
-    // Select the first item in the list
     m_listView.get_selection()->set_selected(0);
   }
 }
@@ -81,7 +92,6 @@ void Spotlight::load_css() {
         (std::istreambuf_iterator<char>(custom_css_file)),
         std::istreambuf_iterator<char>());
 
-    // Combine both CSS contents
     std::string combined_css = main_css_content + "\n" + custom_css_content;
     css_provider->load_from_data(combined_css);
   } else {

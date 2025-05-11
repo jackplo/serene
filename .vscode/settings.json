@@ -56,6 +56,12 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "set": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "variant": "cpp"
     }
 }
