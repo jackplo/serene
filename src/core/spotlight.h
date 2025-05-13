@@ -3,6 +3,7 @@
 #include "../backend/app_searcher.h"
 #include "../backend/file_searcher.h"
 #include "../components/customsearchentry.h"
+#include "../components/itemdetails.h"
 #include "../components/listview.h"
 #include "../components/scrollview.h"
 #include <gtkmm/window.h>
@@ -22,4 +23,5 @@ private:
   ScrollView m_scrollWindow;
   AppSearcher m_appSearcher;
   FileSearcher m_fileSearcher;
+  ItemDetails m_itemDetails;
 };

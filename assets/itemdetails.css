@@ -1,0 +1,27 @@
+.item-details {
+    color: #ffffff;
+}
+  
+.item-details label {
+    color: #ffffff;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.item-description {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.item-path {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.item-size, .item-type {
+    font-size: 14px;
+    opacity: 0.6;
+}

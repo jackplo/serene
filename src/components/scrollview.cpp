@@ -7,7 +7,6 @@ ScrollView::ScrollView() {
   set_hexpand(true);
   set_margin_start(0);
   set_margin_end(0);
-  set_margin_top(6);
   set_margin_bottom(0);
 
   add_css_class("spotlight-scroll");

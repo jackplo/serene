@@ -62,8 +62,8 @@ FileSearcher::calculate_file_type_score(const std::string &filename) const {
       filename_lower.substr(filename_lower.find_last_of(".") + 1);
 
   const std::vector<std::string> common_types = {
-      "pdf", "doc", "docx", "txt", "jpg", "jpeg", "png", "mp3",
-      "mp4", "mov", "zip",  "rar", "xls", "xlsx", "ppt", "pptx"};
+      "pdf", "doc", "docx", "txt", "jpg",  "jpeg", "png",  "mp3", "mp4",
+      "mov", "zip", "rar",  "xls", "xlsx", "ppt",  "pptx", "svg", "gif"};
 
   const std::vector<std::string> programming_types = {
       "cpp", "h",   "hpp", "java", "py", "js",

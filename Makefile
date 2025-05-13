@@ -13,13 +13,14 @@ MODEL_DIR = $(SRC_DIR)/models
 
 # Source files
 CORE_SRC = $(CORE_DIR)/main.cpp $(CORE_DIR)/spotlight.cpp
-COMPONENTS_SRC = $(COMPONENTS_DIR)/listview.cpp $(COMPONENTS_DIR)/scrollview.cpp $(COMPONENTS_DIR)/customsearchentry.cpp
+COMPONENTS_SRC = $(COMPONENTS_DIR)/listview.cpp $(COMPONENTS_DIR)/scrollview.cpp $(COMPONENTS_DIR)/customsearchentry.cpp $(COMPONENTS_DIR)/itemdetails.cpp
 BACKEND_SRC = $(BACKEND_DIR)/app_searcher.cpp $(BACKEND_DIR)/file_searcher.cpp $(BACKEND_DIR)/hybrid_file_searcher.cpp
 MODEL_SRC = $(MODEL_DIR)/applicationobject.cpp $(MODEL_DIR)/applicationlistmodel.cpp $(MODEL_DIR)/fileobject.cpp $(MODEL_DIR)/combinedlistmodel.cpp
 TEST_SRC = $(BACKEND_DIR)/test_app_searcher.cpp
 FILE_SEARCHER_TEST_SRC = $(BACKEND_DIR)/test_file_searcher.cpp
 HYBRID_FILE_SEARCHER_TEST_SRC = $(BACKEND_DIR)/test_hybrid_file_searcher.cpp
 CUSTOM_SEARCH_TEST_SRC = $(SRC_DIR)/test/main.cpp $(SRC_DIR)/test/test_window.cpp $(COMPONENTS_DIR)/customsearchentry.cpp
+ITEM_DETAILS_TEST_SRC = $(SRC_DIR)/test/test_itemdetails.cpp $(COMPONENTS_DIR)/itemdetails.cpp
 
 # Object files
 CORE_OBJ = $(CORE_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
@@ -30,6 +31,7 @@ TEST_OBJ = $(TEST_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 FILE_SEARCHER_TEST_OBJ = $(FILE_SEARCHER_TEST_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 HYBRID_FILE_SEARCHER_TEST_OBJ = $(HYBRID_FILE_SEARCHER_TEST_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 CUSTOM_SEARCH_TEST_OBJ = $(CUSTOM_SEARCH_TEST_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+ITEM_DETAILS_TEST_OBJ = $(ITEM_DETAILS_TEST_SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 # Target executable
 TARGET = serene
@@ -37,6 +39,7 @@ TEST_BIN = $(BUILD_DIR)/test_app_searcher
 FILE_SEARCHER_TEST_BIN = $(BUILD_DIR)/test_file_searcher
 HYBRID_FILE_SEARCHER_TEST_BIN = $(BUILD_DIR)/test_hybrid_file_searcher
 CUSTOM_SEARCH_TEST_BIN = $(BUILD_DIR)/custom_search_test
+ITEM_DETAILS_TEST_BIN = $(BUILD_DIR)/test_itemdetails
 
 # All target
 all: $(TARGET)
@@ -60,6 +63,10 @@ test-hybrid-file-searcher: $(HYBRID_FILE_SEARCHER_TEST_BIN)
 	@echo "Running hybrid file searcher test..."
 	@$(HYBRID_FILE_SEARCHER_TEST_BIN)
 
+test-item-details: $(ITEM_DETAILS_TEST_BIN)
+	@echo "Running item details test..."
+	@$(ITEM_DETAILS_TEST_BIN)
+
 $(TEST_BIN): $(TEST_OBJ) $(BACKEND_OBJ)
 	@echo "Linking test program..."
 	@mkdir -p $(BUILD_DIR)
@@ -74,6 +81,11 @@ $(HYBRID_FILE_SEARCHER_TEST_BIN): $(HYBRID_FILE_SEARCHER_TEST_OBJ) $(BACKEND_OBJ
 	@echo "Linking hybrid file searcher test program..."
 	@mkdir -p $(BUILD_DIR)
 	@$(CXX) $(CXXFLAGS) -o $@ $^
+
+$(ITEM_DETAILS_TEST_BIN): $(ITEM_DETAILS_TEST_OBJ) $(MODEL_OBJ)
+	@echo "Linking item details test program..."
+	@mkdir -p $(BUILD_DIR)
+	@$(CXX) $(CXXFLAGS) -o $@ $^ $(GTK_LDFLAGS)
 
 # Pattern rule for object files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -94,4 +106,4 @@ $(CUSTOM_SEARCH_TEST_BIN): $(CUSTOM_SEARCH_TEST_OBJ)
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET)
 
-.PHONY: all clean test test-file-searcher test-hybrid-file-searcher custom-search-test
+.PHONY: all clean test test-file-searcher test-hybrid-file-searcher custom-search-test test-item-details
