@@ -48,7 +48,6 @@ Spotlight::Spotlight() {
 
   auto separator =
       Gtk::make_managed<Gtk::Separator>(Gtk::Orientation::VERTICAL);
-  separator->set_margin_start(6);
   separator->set_margin_end(6);
 
   m_listView.get_selection()->signal_selection_changed().connect(

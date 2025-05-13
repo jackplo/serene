@@ -1,7 +1,11 @@
 #include "listview.h"
 #include "../models/applicationobject.h"
 #include <cstdlib>
+#include <gdkmm/pixbuf.h>
+#include <gdkmm/texture.h>
+#include <giomm/contenttype.h>
 #include <giomm/listmodel.h>
+#include <gtk/gtkimage.h>
 #include <gtkmm/box.h>
 #include <gtkmm/eventcontroller.h>
 #include <gtkmm/eventcontrollerkey.h>
@@ -71,6 +75,7 @@ void ListView::setup_factory() {
         auto label = Gtk::make_managed<Gtk::Label>();
         label->set_halign(Gtk::Align::START);
         label->set_hexpand(true);
+        label->set_ellipsize(Pango::EllipsizeMode::END);
         box->append(*label);
 
         item->set_child(*box);
@@ -89,14 +94,42 @@ void ListView::setup_factory() {
 
         if (auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(
                 item->get_item())) {
-          icon->set_from_icon_name(app_obj->app.icon);
+          if (!app_obj->app.icon.empty()) {
+            icon->set_from_icon_name(app_obj->app.icon);
+          } else {
+            icon->set_from_icon_name("applications-system");
+          }
           label->set_text(app_obj->app.name);
         } else if (auto file_obj = std::dynamic_pointer_cast<FileObject>(
                        item->get_item())) {
           if (file_obj->result.is_directory) {
             icon->set_from_icon_name("folder");
           } else {
-            icon->set_from_icon_name(file_obj->result.mime_type);
+            // Try to load a preview for image files
+            if (file_obj->result.mime_type.find("image/") == 0) {
+              try {
+                auto pixbuf = Gdk::Pixbuf::create_from_file(
+                    file_obj->result.path, 32, 32, true);
+                if (pixbuf) {
+                  auto texture = Gdk::Texture::create_for_pixbuf(pixbuf);
+                  icon->set(texture);
+                } else {
+                  icon->set_from_icon_name(file_obj->result.mime_type);
+                }
+              } catch (const Glib::Error &) {
+                icon->set_from_icon_name(file_obj->result.mime_type);
+              }
+            } else {
+              // For non-image files, use the system icon
+              auto content_type =
+                  Gio::content_type_from_mime_type(file_obj->result.mime_type);
+              auto icon_name = Gio::content_type_get_icon(content_type);
+              if (icon_name) {
+                icon->set(icon_name);
+              } else {
+                icon->set_from_icon_name("text-x-generic");
+              }
+            }
           }
           label->set_text(file_obj->result.name);
         }
