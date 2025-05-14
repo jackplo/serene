@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../backend/app_searcher.h"
-#include "../backend/file_searcher.h"
-#include "../components/customsearchentry.h"
-#include "../components/itemdetails.h"
-#include "../components/listview.h"
-#include "../components/scrollview.h"
+#include "customsearchentry.h"
+#include "itemdetails.h"
+#include "lib/include/app_searcher.h"
+#include "lib/include/file_searcher.h"
+#include "listview.h"
+#include "scrollview.h"
 #include <gtkmm/window.h>
 
 class Spotlight : public Gtk::Window {

@@ -1,4 +1,6 @@
-#include "combinedlistmodel.h"
+#include "../include/combinedlistmodel.h"
+#include "../include/applicationobject.h"
+#include "../include/fileobject.h"
 
 Glib::RefPtr<CombinedListModel> CombinedListModel::create() {
   return Glib::make_refptr_for_instance(new CombinedListModel());

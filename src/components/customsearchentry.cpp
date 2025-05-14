@@ -1,5 +1,4 @@
-// src/components/customsearchentry.cpp
-#include "customsearchentry.h"
+#include "../include/customsearchentry.h"
 #include <gtkmm/eventcontrollerkey.h>
 #include <iostream>
 

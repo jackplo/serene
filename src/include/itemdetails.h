@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../backend/app_searcher.h"
-#include "../backend/file_searcher.h"
-#include "../models/applicationobject.h"
-#include "../models/fileobject.h"
+#include "applicationobject.h"
+#include "fileobject.h"
+#include "lib/include/app_searcher.h"
+#include "lib/include/file_searcher.h"
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>

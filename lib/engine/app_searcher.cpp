@@ -1,4 +1,4 @@
-#include "app_searcher.h"
+#include "../include/app_searcher.h"
 #include <algorithm>
 #include <filesystem>
 #include <fstream>

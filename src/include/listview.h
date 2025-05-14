@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../backend/app_searcher.h"
-#include "../backend/file_searcher.h"
-#include "../models/combinedlistmodel.h"
+#include "combinedlistmodel.h"
+#include "lib/include/app_searcher.h"
+#include "lib/include/file_searcher.h"
 #include <giomm/liststore.h>
 #include <gtkmm/listview.h>
 #include <gtkmm/signallistitemfactory.h>

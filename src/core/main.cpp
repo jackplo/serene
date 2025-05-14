@@ -1,4 +1,4 @@
-#include "spotlight.h"
+#include "../include/serene.h"
 #include <gtkmm/application.h>
 
 int main(int argc, char *argv[]) {

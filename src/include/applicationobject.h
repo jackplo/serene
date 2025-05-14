@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../backend/app_searcher.h"
+#include "../lib/include/app_searcher.h"
 #include <giomm/listmodel.h>
 
 class ApplicationObject : public Glib::Object {
@@ -11,4 +11,5 @@ public:
 
 protected:
   ApplicationObject() {}
+  ApplicationObject(const Application &application) : app(application) {}
 };

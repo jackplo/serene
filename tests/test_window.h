@@ -1,5 +1,5 @@
 #pragma once
-#include "../components/customsearchentry.h"
+#include "../src/include/customsearchentry.h"
 #include <gtkmm/box.h>
 #include <gtkmm/window.h>
 

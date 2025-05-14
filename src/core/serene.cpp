@@ -1,4 +1,4 @@
-#include "spotlight.h"
+#include "../include/serene.h"
 #include <algorithm>
 #include <fstream>
 #include <gtkmm/application.h>

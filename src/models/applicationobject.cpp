@@ -1,9 +1,6 @@
-#include "applicationobject.h"
+#include "../include/applicationobject.h"
 
 Glib::RefPtr<ApplicationObject>
-ApplicationObject::create(const Application &application) {
-  auto obj = Glib::make_refptr_for_instance<ApplicationObject>(
-      new ApplicationObject());
-  obj->app = application;
-  return obj;
+ApplicationObject::create(const Application &app) {
+  return Glib::make_refptr_for_instance(new ApplicationObject(app));
 }

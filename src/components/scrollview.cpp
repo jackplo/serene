@@ -1,4 +1,4 @@
-#include "scrollview.h"
+#include "../include/scrollview.h"
 
 ScrollView::ScrollView() {
   set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC);

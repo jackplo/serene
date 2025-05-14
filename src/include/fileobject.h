@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../backend/file_searcher.h"
+#include "../lib/include/file_searcher.h"
 #include <giomm/listmodel.h>
 
 class FileObject : public Glib::Object {
@@ -11,4 +11,5 @@ public:
 
 protected:
   FileObject() {}
+  FileObject(const FileResult &file_result) : result(file_result) {}
 };

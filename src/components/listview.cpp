@@ -1,5 +1,5 @@
-#include "listview.h"
-#include "../models/applicationobject.h"
+#include "../include/listview.h"
+#include "../include/applicationobject.h"
 #include <cstdlib>
 #include <gdkmm/pixbuf.h>
 #include <gdkmm/texture.h>
@@ -105,7 +105,7 @@ void ListView::setup_factory() {
           if (file_obj->result.is_directory) {
             icon->set_from_icon_name("folder");
           } else {
-            // Try to load a preview for image files
+            // preview for image files
             if (file_obj->result.mime_type.find("image/") == 0) {
               try {
                 auto pixbuf = Gdk::Pixbuf::create_from_file(
@@ -120,7 +120,7 @@ void ListView::setup_factory() {
                 icon->set_from_icon_name(file_obj->result.mime_type);
               }
             } else {
-              // For non-image files, use the system icon
+              // non-image files use system icon
               auto content_type =
                   Gio::content_type_from_mime_type(file_obj->result.mime_type);
               auto icon_name = Gio::content_type_get_icon(content_type);

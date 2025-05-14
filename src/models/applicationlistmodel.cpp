@@ -1,4 +1,4 @@
-#include "applicationlistmodel.h"
+#include "../include/applicationlistmodel.h"
 #include <iostream>
 
 Glib::RefPtr<ApplicationListModel> ApplicationListModel::create() {
