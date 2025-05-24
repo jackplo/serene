@@ -33,6 +33,20 @@ Make sure your system has the following dependencies installed:
   - `cairomm-1.16`
   - `sigc++-3.0`
 
+On Linux Mint 22.1, you can do the following
+```bash
+sudo apt update
+sudo apt install \
+  libgtk-4-dev \
+  libgtkmm-4.0-dev \
+  libglibmm-2.68-dev \
+  libpangomm-2.48-dev \
+  libcairomm-1.16-dev \
+  libsigc++-3.0-dev \
+  pkg-config \
+  build-essential
+```
+
 ## Build the Project
 
 ```bash
