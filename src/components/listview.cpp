@@ -1,5 +1,6 @@
 #include "../include/listview.h"
 #include "../include/applicationobject.h"
+#include <algorithm>
 #include <cstdlib>
 #include <gdkmm/pixbuf.h>
 #include <gdkmm/texture.h>
@@ -63,75 +64,33 @@ void ListView::setup_factory() {
   m_factory->signal_setup().connect(
       [](const Glib::RefPtr<Gtk::ListItem> &item) {
         auto box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::HORIZONTAL, 6);
-        box->set_margin_start(6);
-        box->set_margin_end(6);
-        box->set_margin_top(6);
-        box->set_margin_bottom(6);
+        box->set_margin(6); // Single call instead of 4 separate calls
 
         auto icon = Gtk::make_managed<Gtk::Image>();
         icon->set_icon_size(Gtk::IconSize::LARGE);
-        box->append(*icon);
 
         auto label = Gtk::make_managed<Gtk::Label>();
         label->set_halign(Gtk::Align::START);
         label->set_hexpand(true);
         label->set_ellipsize(Pango::EllipsizeMode::END);
-        box->append(*label);
 
+        box->append(*icon);
+        box->append(*label);
         item->set_child(*box);
       });
 
   m_factory->signal_bind().connect(
       [this](const Glib::RefPtr<Gtk::ListItem> &item) {
-        auto box = dynamic_cast<Gtk::Box *>(item->get_child());
-        if (!box)
-          return;
-
-        auto icon = dynamic_cast<Gtk::Image *>(box->get_first_child());
-        auto label = dynamic_cast<Gtk::Label *>(box->get_last_child());
-        if (!icon || !label)
-          return;
+        auto box = static_cast<Gtk::Box *>(item->get_child());
+        auto icon = static_cast<Gtk::Image *>(box->get_first_child());
+        auto label = static_cast<Gtk::Label *>(box->get_last_child());
 
         if (auto app_obj = std::dynamic_pointer_cast<ApplicationObject>(
                 item->get_item())) {
-          if (!app_obj->app.icon.empty()) {
-            icon->set_from_icon_name(app_obj->app.icon);
-          } else {
-            icon->set_from_icon_name("applications-system");
-          }
-          label->set_text(app_obj->app.name);
+          handle_application_item(app_obj, icon, label);
         } else if (auto file_obj = std::dynamic_pointer_cast<FileObject>(
                        item->get_item())) {
-          if (file_obj->result.is_directory) {
-            icon->set_from_icon_name("folder");
-          } else {
-            // preview for image files
-            if (file_obj->result.mime_type.find("image/") == 0) {
-              try {
-                auto pixbuf = Gdk::Pixbuf::create_from_file(
-                    file_obj->result.path, 32, 32, true);
-                if (pixbuf) {
-                  auto texture = Gdk::Texture::create_for_pixbuf(pixbuf);
-                  icon->set(texture);
-                } else {
-                  icon->set_from_icon_name(file_obj->result.mime_type);
-                }
-              } catch (const Glib::Error &) {
-                icon->set_from_icon_name(file_obj->result.mime_type);
-              }
-            } else {
-              // non-image files use system icon
-              auto content_type =
-                  Gio::content_type_from_mime_type(file_obj->result.mime_type);
-              auto icon_name = Gio::content_type_get_icon(content_type);
-              if (icon_name) {
-                icon->set(icon_name);
-              } else {
-                icon->set_from_icon_name("text-x-generic");
-              }
-            }
-          }
-          label->set_text(file_obj->result.name);
+          handle_file_item(file_obj, icon, label);
         }
       });
 
@@ -168,5 +127,60 @@ void ListView::on_row_activated(guint position) {
     launch_application(app_obj->app.exec);
   } else if (auto file_obj = std::dynamic_pointer_cast<FileObject>(item)) {
     open_file(file_obj->result.path);
+  }
+}
+
+void ListView::handle_application_item(
+    const std::shared_ptr<ApplicationObject> &app_obj, Gtk::Image *icon,
+    Gtk::Label *label) {
+  if (!app_obj->app.icon.empty()) {
+    if (app_obj->app.icon[0] == '/') {
+      // File path icon
+      try {
+        auto texture = Gdk::Texture::create_from_file(
+            Gio::File::create_for_path(app_obj->app.icon));
+        icon->set(texture);
+      } catch (const Glib::Error &) {
+        icon->set_from_icon_name("applications-system");
+      }
+    } else {
+      // Named icon
+      icon->set_from_icon_name(app_obj->app.icon);
+    }
+  } else {
+    icon->set_from_icon_name("applications-system");
+  }
+  label->set_text(app_obj->app.name);
+}
+
+void ListView::handle_file_item(const std::shared_ptr<FileObject> &file_obj,
+                                Gtk::Image *icon, Gtk::Label *label) {
+  if (file_obj->result.is_directory) {
+    icon->set_from_icon_name("folder");
+  } else if (file_obj->result.mime_type.find("image/") == 0) {
+    // Image file preview
+    try {
+      auto pixbuf =
+          Gdk::Pixbuf::create_from_file(file_obj->result.path, 32, 32, true);
+      icon->set(Gdk::Texture::create_for_pixbuf(pixbuf));
+    } catch (const Glib::Error &) {
+      set_mime_type_icon(icon, file_obj->result.mime_type);
+    }
+  } else {
+    // Regular file with MIME type icon
+    set_mime_type_icon(icon, file_obj->result.mime_type);
+  }
+  label->set_text(file_obj->result.name);
+}
+
+void ListView::set_mime_type_icon(Gtk::Image *icon,
+                                  const std::string &mime_type) {
+  auto content_type = Gio::content_type_from_mime_type(mime_type);
+  auto icon_obj = Gio::content_type_get_icon(content_type);
+
+  if (icon_obj) {
+    icon->set(icon_obj);
+  } else {
+    icon->set_from_icon_name("text-x-generic");
   }
 }

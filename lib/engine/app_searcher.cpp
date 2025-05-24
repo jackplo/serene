@@ -75,9 +75,11 @@ Application AppSearcher::parse_desktop_file(const std::string &file_path) {
 }
 
 bool AppSearcher::load_applications() {
-  std::vector<std::string> app_dirs = {"/usr/share/applications",
-                                       std::string(getenv("HOME")) +
-                                           "/.local/share/applications"};
+  std::vector<std::string> app_dirs = {
+      "/usr/share/applications",
+      std::string(getenv("HOME")) + "/.local/share/applications",
+      "/usr/local/share/applications/",
+  };
 
   for (const auto &dir : app_dirs) {
     if (!fs::exists(dir))
