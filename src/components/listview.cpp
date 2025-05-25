@@ -43,9 +43,8 @@ ListView::ListView() {
 
 ListView::~ListView() {}
 
-void ListView::update_model(const std::vector<Application> &applications,
-                            const std::vector<FileResult> &files) {
-  m_model->update(applications, files);
+void ListView::update_model(const std::vector<Result> &result) {
+  m_model->update(result);
 }
 
 void ListView::launch_application(const std::string &exec_command) {

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "../lib/include/app_searcher.h"
+#include "../lib/include/file_searcher.h"
+#include "../lib/include/result.h"
 #include "combinedlistmodel.h"
-#include "lib/include/app_searcher.h"
-#include "lib/include/file_searcher.h"
 #include <giomm/liststore.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
@@ -18,8 +19,7 @@ class ListView : public Gtk::ListView {
 public:
   ListView();
   virtual ~ListView();
-  void update_model(const std::vector<Application> &applications,
-                    const std::vector<FileResult> &files);
+  void update_model(const std::vector<Result> &result);
   void launch_application(const std::string &exec_command);
   void open_file(const std::string &path);
   Glib::RefPtr<Gtk::SingleSelection> get_selection() { return m_selection; }

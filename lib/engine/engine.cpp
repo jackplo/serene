@@ -15,14 +15,18 @@ bool Engine::initialize() {
 
 std::vector<Result> Engine::search(const std::string &query,
                                    size_t max_results) {
-
   std::vector<Result> results;
 
   auto app_results = m_appSearcher->search(query);
   auto file_results = m_fileSearcher->search(query, max_results);
 
-  results.insert(results.end(), app_results.begin(), app_results.end());
-  results.insert(results.end(), file_results.begin(), file_results.end());
+  for (const auto &app : app_results) {
+    results.push_back(Result::from_application(app));
+  }
+
+  for (const auto &file : file_results) {
+    results.push_back(Result::from_file(file));
+  }
 
   return results;
 }

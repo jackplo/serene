@@ -1,7 +1,12 @@
-#include "test_window.h"
+#include "../lib/include/engine.h"
 #include <gtkmm/application.h>
 
 int main(int argc, char *argv[]) {
-  auto app = Gtk::Application::create("org.spotlight.search");
-  return app->make_window_and_run<TestWindow>(argc, argv);
+  std::string query = "repos";
+
+  Engine *engine = new Engine();
+
+  engine->search(query);
+  delete engine;
+  return 0;
 }

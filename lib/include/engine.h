@@ -1,6 +1,7 @@
 #include "app_searcher.h"
 #include "file_searcher.h"
 #include "result.h"
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>

@@ -10,17 +10,16 @@ CombinedListModel::CombinedListModel() {
   m_store = Gio::ListStore<Glib::Object>::create();
 }
 
-void CombinedListModel::update(const std::vector<Application> &apps,
-                               const std::vector<FileResult> &files) {
+void CombinedListModel::update(const std::vector<Result> &results) {
   m_store->remove_all();
 
-  for (const auto &app : apps) {
-    auto app_obj = ApplicationObject::create(app);
-    m_store->append(app_obj);
-  }
-
-  for (const auto &file : files) {
-    auto file_obj = FileObject::create(file);
-    m_store->append(file_obj);
+  for (const auto &result : results) {
+    if (result.type == ResultType::APPLICATION) {
+      auto app_obj = ApplicationObject::create(result);
+      m_store->append(app_obj);
+    } else if (result.type == ResultType::FILE) {
+      auto file_obj = FileObject::create(result);
+      m_store->append(file_obj);
+    }
   }
 }
