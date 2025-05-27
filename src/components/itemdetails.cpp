@@ -1,4 +1,6 @@
 #include "../include/itemdetails.h"
+#include "applicationobject.h"
+#include "fileobject.h"
 
 ItemDetails::ItemDetails() {
   set_orientation(Gtk::Orientation::VERTICAL);

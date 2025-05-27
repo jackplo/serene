@@ -1,7 +1,5 @@
 #pragma once
 
-#include "applicationobject.h"
-#include "fileobject.h"
 #include "../lib/include/app_searcher.h"
 #include "../lib/include/file_searcher.h"
 #include <gtkmm/box.h>

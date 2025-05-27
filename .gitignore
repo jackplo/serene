@@ -1,3 +1,10 @@
 archive/
 build/
 serene
+
+compile_commands.json
+.vscode/
+.cache/
+
+Serene_Roadmap.md
+Serene_architecture

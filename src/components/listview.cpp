@@ -1,21 +1,4 @@
 #include "../include/listview.h"
-#include "../include/applicationobject.h"
-#include <algorithm>
-#include <cstdlib>
-#include <gdkmm/pixbuf.h>
-#include <gdkmm/texture.h>
-#include <giomm/contenttype.h>
-#include <giomm/listmodel.h>
-#include <gtk/gtkimage.h>
-#include <gtkmm/box.h>
-#include <gtkmm/eventcontroller.h>
-#include <gtkmm/eventcontrollerkey.h>
-#include <gtkmm/eventcontrollermotion.h>
-#include <gtkmm/gestureclick.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
-#include <iostream>
-#include <regex>
 
 ListView::ListView() {
   set_vexpand(true);
